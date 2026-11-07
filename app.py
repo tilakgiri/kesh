@@ -51,8 +51,3 @@ def system_dashboard():
 
 
 system_dashboard()
-
-st.divider()
-
-st.caption("Personal PC & Network Monitor | Version 1.0")
-st.caption("Developed with Python and Streamlit")
