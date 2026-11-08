@@ -4,6 +4,7 @@ import psutil
 import plotly.graph_objects as go
 from collections import deque
 from datetime import datetime
+from monitor.network_monitor import check_internet
 
 # Page configuration
 st.set_page_config(
@@ -21,12 +22,20 @@ if "timestamps" not in st.session_state:
     st.session_state.cpu_history = deque(maxlen=30)
     st.session_state.ram_history = deque(maxlen=30)
 
+if "ping_history" not in st.session_state:
+    st.session_state.ping_history = deque(maxlen=30)
+
 @st.fragment(run_every="5s")
 def dashboard():
 
     # Collect system data
     cpu = psutil.cpu_percent(interval=0.5)
     ram = psutil.virtual_memory()
+    network = check_internet()
+
+    st.session_state.ping_history.append(
+    network["latency"]
+    )
 
     timestamp = datetime.now().strftime("%H:%M:%S")
 
@@ -96,9 +105,62 @@ st.divider()
 
 st.subheader("Internet Monitoring")
 
+
+st.subheader("Internet Monitoring")
+
+network = check_internet()
+
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Internet Status", "Coming Soon")
-col2.metric("Ping", "Coming Soon")
-col3.metric("Network Speed", "Coming Soon")
+with col1:
+    if network["connected"]:
+        st.metric("Internet Status", "Connected")
+    else:
+        st.metric("Internet Status", "Disconnected")
 
+with col2:
+    if network["latency"] is not None:
+        st.metric(
+            "Ping Latency",
+            f'{network["latency"]} ms'
+        )
+    else:
+        st.metric("Ping Latency", "N/A")
+
+with col3:
+    if network["connected"]:
+        if network["latency"] < 50:
+            quality = "Excellent"
+        elif network["latency"] < 100:
+            quality = "Good"
+        else:
+            quality = "Slow"
+    else:
+        quality = "Offline"
+
+    st.metric("Connection Quality", quality)
+
+
+
+st.subheader("Ping Latency History")
+
+ping_fig = go.Figure()
+
+ping_fig.add_trace(go.Scatter(
+    x=list(st.session_state.timestamps),
+    y=list(st.session_state.ping_history),
+    mode="lines+markers",
+    name="Ping",
+    connectgaps=False
+))
+
+ping_fig.update_layout(
+    xaxis_title="Time",
+    yaxis_title="Latency (ms)",
+    height=300
+)
+
+st.plotly_chart(
+    ping_fig,
+    use_container_width=True
+)
