@@ -1,0 +1,64 @@
+
+/* Main application */
+.stApp {
+    background-color: #0b1120;
+    color: #e2e8f0;
+}
+
+/* Hide default Streamlit header */
+header[data-testid="stHeader"] {
+    background-color: transparent;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #111c30;
+    border-right: 1px solid #24334b;
+}
+
+/* Main title */
+h1, h2, h3 {
+    color: #f1f5f9 !important;
+}
+
+/* Metric cards */
+div[data-testid="stMetric"] {
+    background-color: #152238;
+    border: 1px solid #263a56;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* Metric labels */
+div[data-testid="stMetricLabel"] {
+    color: #94a3b8;
+}
+
+/* Metric values */
+div[data-testid="stMetricValue"] {
+    color: #38bdf8;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #0891b2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+}
+
+.stButton > button:hover {
+    background-color: #0e7490;
+    color: white;
+}
+
+/* Dividers */
+hr {
+    border-color: #263a56;
+}
+
+/* Captions */
+.stCaption {
+    color: #94a3b8;
+}
