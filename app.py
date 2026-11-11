@@ -17,7 +17,7 @@ from monitor.network_monitor import check_internet
 
 st.set_page_config(
     page_title="KESH | PC & Network Monitor",
-    page_icon="🌐",
+    page_icon="-",
     layout="wide",
     initial_sidebar_state="expanded"
 )
